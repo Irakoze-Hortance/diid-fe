@@ -1,102 +1,202 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import { useState } from 'react';
+import { 
+  Globe, 
+  BookOpen, 
+  Users, 
+  ArrowRight,
+  Menu,
+  X,
+  Shield,
+  PenTool 
+} from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const navItems = [
+    { href: "#features", label: "Features", icon: BookOpen },
+    { href: "#mission", label: "Our Mission", icon: Globe },
+    { href: "#about", label: "About", icon: Users },
+  ];
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-black relative text-gray-100">
+      {/* Desktop Navigation */}
+      <header className="container mx-auto px-6 py-4 flex justify-between items-center relative z-50">
+        <div className="flex items-center">
+          <Globe size={40} className="text-emerald-500 mr-2" />
+          <h1 className="text-2xl font-bold text-emerald-400">DIID</h1>
+        </div>
+        
+        {/* Desktop Nav Links */}
+        <nav className="hidden md:flex items-center space-x-6">
+          {navItems.map((item) => (
+            <Link 
+              key={item.href}
+              href={item.href} 
+              className="text-gray-300 hover:text-emerald-400 transition flex items-center"
+            >
+              <item.icon className="mr-2" size={20} />
+              {item.label}
+            </Link>
+          ))}
+          <Link 
+            href="/auth" 
+            className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Join Now <ArrowRight className="ml-2" size={20} />
+          </Link>
+        </nav>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden">
+          <button 
+            onClick={toggleMobileMenu} 
+            className="text-gray-300 hover:text-emerald-400"
           >
-            Read our docs
-          </a>
+            {mobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-95 z-40 flex flex-col items-center justify-center">
+          <nav className="space-y-6 text-center">
+            {navItems.map((item) => (
+              <Link 
+                key={item.href}
+                href={item.href} 
+                onClick={toggleMobileMenu}
+                className="text-gray-100 text-2xl hover:text-emerald-400 transition flex items-center justify-center"
+              >
+                <item.icon className="mr-4" size={30} />
+                {item.label}
+              </Link>
+            ))}
+            <Link 
+              href="/auth" 
+              onClick={toggleMobileMenu}
+              className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition inline-flex items-center justify-center"
+            >
+              Join Now <ArrowRight className="ml-2" size={24} />
+            </Link>
+          </nav>
+        </div>
+      )}
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <div>
+          <h2 className="text-5xl font-extrabold text-emerald-400 mb-6 leading-tight">
+            Bridging Digital Divides, Empowering Communities
+          </h2>
+          <p className="text-xl text-gray-300 mb-8">
+            A transformative platform connecting refugees, indigenous communities, 
+            and the digital world through innovative technology and inclusive design.
+          </p>
+          <div className="flex space-x-4">
+            <Link 
+              href="/auth" 
+              className="bg-emerald-600 text-white px-6 py-3 rounded-xl text-lg hover:bg-emerald-700 transition inline-flex items-center"
+            >
+              Get Involved <ArrowRight className="ml-2" size={24} />
+            </Link>
+            <Link 
+              href="#mission"
+              className="border-2 border-emerald-600 text-emerald-400 px-6 py-3 rounded-xl text-lg hover:bg-emerald-900/30 transition inline-flex items-center"
+            >
+              Learn More
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-6">
+          <div className="bg-zinc-800 p-6 rounded-xl shadow-2xl transform hover:scale-105 transition">
+            <Users size={40} className="text-emerald-500 mb-4" />
+            <h3 className="text-xl font-bold mb-2 text-emerald-400">Community Empowerment</h3>
+            <p className="text-gray-300">
+              Tailored support for marginalized digital inclusion
+            </p>
+          </div>
+
+          <div className="bg-zinc-800 p-6 rounded-xl shadow-2xl transform hover:scale-105 transition">
+            <BookOpen size={40} className="text-emerald-500 mb-4" />
+            <h3 className="text-xl font-bold mb-2 text-emerald-400">Digital Literacy</h3>
+            <p className="text-gray-300">
+              Comprehensive learning resources
+            </p>
+          </div>
+
+          <div className="bg-zinc-800 p-6 rounded-xl shadow-2xl transform hover:scale-105 transition col-span-2">
+            <Globe size={40} className="text-emerald-500 mb-4" />
+            <h3 className="text-xl font-bold mb-2 text-emerald-400">Global Connectivity</h3>
+            <p className="text-gray-300">
+              Breaking barriers for refugees and indigenous communities
+            </p>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Features Section */}
+      <section id="features" className="container mx-auto px-6 py-16 bg-zinc-900 bg-opacity-50">
+        <h2 className="text-4xl font-bold text-center text-emerald-400 mb-12">Key Features</h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="bg-zinc-800 p-6 rounded-xl text-center">
+            <Shield size={50} className="mx-auto text-emerald-500 mb-4" />
+            <h3 className="text-xl font-bold mb-4 text-emerald-400">Secure Access</h3>
+            <p className="text-gray-300">
+              Inclusive authentication and privacy protection
+            </p>
+          </div>
+          <div className="bg-zinc-800 p-6 rounded-xl text-center">
+            <PenTool size={50} className="mx-auto text-emerald-500 mb-4" />
+            <h3 className="text-xl font-bold mb-4 text-emerald-400">Cultural Collaboration</h3>
+            <p className="text-gray-300">
+              Interactive platforms respecting diverse backgrounds
+            </p>
+          </div>
+          <div className="bg-zinc-800 p-6 rounded-xl text-center">
+            <BookOpen size={50} className="mx-auto text-emerald-500 mb-4" />
+            <h3 className="text-xl font-bold mb-4 text-emerald-400">Resource Accessibility</h3>
+            <p className="text-gray-300">
+              Multilingual and culturally sensitive content
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black text-gray-300 py-8 border-t border-zinc-800">
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
+          <div>
+            <h4 className="font-bold mb-4 text-emerald-400">DIID</h4>
+            <p>Connecting marginalized communities to the digital world</p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-4 text-emerald-400">Quick Links</h4>
+            <nav className="space-y-2">
+              <Link href="/auth" className="hover:text-emerald-400">Join</Link>
+              <Link href="#features" className="hover:text-emerald-400">Features</Link>
+              <Link href="#mission" className="hover:text-emerald-400">Our Mission</Link>
+            </nav>
+          </div>
+          <div>
+            <h4 className="font-bold mb-4 text-emerald-400">Contact</h4>
+            <p>connect@diid.org</p>
+            <p>+1 (555) 123-4567</p>
+          </div>
+        </div>
+        <div className="text-center mt-8 border-t border-zinc-800 pt-4">
+          <p>&copy; 2025 DIID. Bridging Digital Divides.</p>
+        </div>
       </footer>
     </div>
   );
