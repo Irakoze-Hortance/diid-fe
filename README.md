@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DIID Frontend Application
+
+Digital Inclusion and Innovation for Development (DIID) frontend is a Next.js application that provides a user interface for the digital literacy education platform designed for refugee communities.
+
+## Project Overview
+
+This frontend application provides interfaces for:
+- User authentication (login and registration)
+- Role-based dashboards for students and teachers
+- Course browsing, creation, and management
+- Enrollment management
+- Progress tracking
+
+## Proposed Pages
+
+Based on the backend API endpoints, the frontend should include:
+
+### Authentication
+- `/login` - User login page
+- `/register` - User registration page with role selection
+
+### Student Experience
+- `/dashboard` - Student dashboard showing enrolled courses and progress
+- `/courses` - Browse available courses
+- `/courses/[id]` - View course details and enroll
+- `/my-courses` - View and manage enrolled courses
+- `/profile` - Student profile management
+
+### Teacher Experience
+- `/teacher/dashboard` - Teacher dashboard showing created courses
+- `/teacher/courses` - Manage existing courses
+- `/teacher/courses/new` - Create new course
+- `/teacher/courses/[id]` - Edit course details
+- `/teacher/courses/[id]/students` - Manage student enrollments and progress
+
+### Admin (Optional)
+- `/admin/users` - User management
+- `/admin/courses` - Course oversight
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd diid-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables
+Create a `.env.local` file with:
+```
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Start the development server
+```bash
+npm run dev
+```
 
-## Learn More
+The development server will be running at http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+## API Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The frontend connects to the backend API using:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `fetch` or `axios` for API requests
+- JWT authentication stored in localStorage/cookies
+- React context for global state management
 
-## Deploy on Vercel
+### Example API Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```javascript
+// Example of login request
+const loginUser = async (email, password) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      localStorage.setItem('token', data.access_token);
+      return data;
+    } else {
+      throw new Error(data.message || 'Login failed');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
+  }
+};
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Building for Production
+
+```bash
+npm run build
+```
+
+To start the production server:
+
+```bash
+npm start
+```
+
+## Deployment
+
+The Next.js application can be deployed to platforms like Vercel, Netlify, or a custom server.
+
+### Vercel Deployment
+
+```bash
+npm install -g vercel
+vercel
+```
+
+## Design System
+
+The application uses:
+- Tailwind CSS for styling
+- Responsive design for mobile and desktop views
+- Accessible components following WCAG guidelines
+
+## License
+
+[MIT](LICENSE)
