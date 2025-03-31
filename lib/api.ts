@@ -50,7 +50,6 @@ export const getLoggedInUser = (): User | null => {
  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Only run this code on the client side
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
